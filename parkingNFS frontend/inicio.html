@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta http-equiv="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>parking</title>
+  <body>esta atento a nuestras novedades
+  <hr>
+    <img src="imagenes/Logo-removebg-preview.png" class="rounded mx-auto d-block" alt="...">
+  <h1>parkingNFS</h1>
+  <br><br><br>
+  <center><p>nuestras instalaciones estan listas para recibirte con nuestros brazos abiertos
+    recuerda que te puedes acercar a hablar con cualquiera de nuestros trabajadores 
+    o usar nuestra linea de emergencia
+  </p></center>
+  <hr>
+  <br><br>
+  <meta charset="UTF-8">
+  <title>Carrusel Simple</title>
+  <style>
+    .carousel {
+      width: 500px;
+      height: 300px;
+      margin: auto;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid #ccc;
+    }
+
+    .carousel img {
+      width: 100%;
+      height: 100%;
+      display: none;
+      object-fit: cover;
+    }
+
+    .carousel img.active {
+      display: block;
+    }
+
+    .controls {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .controls button {
+      padding: 8px 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="carousel" id="carousel">
+  <img src="imagenes/Logo-removebg-preview.png" class="active" alt="Imagen 1">
+  <img src="imagenes/perfil-removebg-preview.png" alt="Imagen 2">
+  <img src="imagenes/City-Parking_Valet-Parking-300x300.png" alt="Imagen 3">
+</div>
+
+<div class="controls">
+  <button onclick="prev()">Anterior</button>
+  <button onclick="next()">Siguiente</button>
+</div>
+
+<script>
+  const images = document.querySelectorAll('#carousel img');
+  let current = 0;
+
+  function showImage(index) {
+    images.forEach((img, i) => {
+      img.classList.toggle('active', i === index);
+    });
+  }
+
+  function next() {
+    current = (current + 1) % images.length;
+    showImage(current);
+  }
+
+  function prev() {
+    current = (current - 1 + images.length) % images.length;
+    showImage(current);
+  }
+</script>
+  </button>
+  <HR>
+</div>
+<hr>
+<br><br>
+<txt-1
+
+
+  </body>
+    </html>
