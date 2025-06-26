@@ -42,7 +42,7 @@
 
       <a href="http://127.0.0.1:5500/login.html">¿ya tienes una cuenta?,ingresar</a>
 
-      <input type="submit" class="btn btn-primary" value="crear" class="submit">
+      <button type="button" class="btn btn-primary">crear</button>
     </div>
     </forms>
   </div>
@@ -51,3 +51,25 @@
 </body>
 
 </html>
+
+<script>
+  $(document).ready(fuction(){
+
+      $("").click(function(){
+        parent.location = "pagina.html";
+      });
+
+           $.ajax({
+               type: "post"
+               data: datos,
+               url: "",
+               success: (valor){
+
+               }
+           });
+
+
+          });
+
+
+</script>
