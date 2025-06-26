@@ -39,11 +39,11 @@ if not DEBUG:
 else:
     CORS_ALLOW_ALL_ORIGINS = True
 
-ROOT_URLCONF = 'jeipark.urls'
+ROOT_URLCONF = 'parking_NFS.urls'
 
 TEMPLATES = [...]
 
-WSGI_APPLICATION = 'jeipark.wsgi.application'
+WSGI_APPLICATION = 'parking_NFS.wsgi.application'
 
 DATABASES = {
     'default': {
