@@ -5,5 +5,3 @@ class servicio (models.model):
                 tiempo_de_servicio=models.TextField ("tiempo_de_servicio")
                 autolavado=models.TextField ("autolavdo")
                 cotos_adicionales=models.TextField ("costos_adicionales")
-
-                        
