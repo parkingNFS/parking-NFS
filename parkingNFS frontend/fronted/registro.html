@@ -1,75 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="width=device-width, initial-scale=1.0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>crea tu cuenta</title>
-
-<link href="css/bootstrap.min.css"  rel="stylesheet" />
-
+  <title>Crear tu cuenta</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
 </head>
 
 <body>
   <div class="container">
-
     <div class="info">
-
-      <p class="txt-1"> gracias por confiar en nosotros</p>
-
-      <h2>bienvenido a parking NFS</h2>
+      <p class="txt-1">Gracias por confiar en nosotros</p>
+      <h2>Bienvenido a Parking NFS</h2>
       <hr>
       <p class="txt-2">
-        muchas gracias por querer unirte a esta hermosa comunida 
-        y recuerda que siempre vamos a estar para ti y a tu disposicion
-
+        Muchas gracias por querer unirte a esta hermosa comunidad 
+        y recuerda que siempre vamos a estar para ti y a tu disposición
       </p>
-
     </div>
 
-    <h2>crear cuenta
-
-    </h2>
-    <p>no te pierdas de comprar nuestro paquete VIP
-        tu primera vez tendra un descunto de 50% y
-        un descuento en nuestra cafeteria
-    </p>
-    <div class="inputs">
-
-      <input type="email" class="form-control" placeholder="ingresa tu correo">
-      <input type="password" class="form-control" class="box" placeholder="ingrese su contraseña">
-
-      <a href="http://127.0.0.1:5500/login.html">¿ya tienes una cuenta?,ingresar</a>
-
-      <button type="button" class="btn btn-primary">crear</button>
-    </div>
-    </forms>
+    <form id="registroForm">
+      <h2>Crear cuenta</h2>
+      <p>
+        No te pierdas de comprar nuestro paquete VIP.
+        Tu primera vez tendrá un descuento de 50% y
+        un descuento en nuestra cafetería.
+      </p>
+      <div class="inputs">
+        <input type="email" class="form-control" id="email" placeholder="Ingresa tu correo" required>
+        <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña" required>
+        
+        <a href="http://127.0.0.1:5500/login.html">¿Ya tienes una cuenta? Ingresar</a>
+        
+        <button type="submit" class="btn btn-primary">Crear</button>
+      </div>
+    </form>
   </div>
 
-  
-</body>
-
-</html>
-
-<script>
-  $(document).ready(fuction(){
-
-      $("crear").click(function(){
-        parent.location = "pagina.html";
+  <!-- Incluir jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      $("#registroForm").submit(function(e){
+        e.preventDefault();
+        
+        var datos = {
+          email: $("#email").val(),
+          password: $("#password").val()
+        };
+        
+        $.ajax({
+          type: "POST",
+          data: datos,
+          url: "tu_endpoint_de_registro", // Reemplaza con tu URL real
+          success: function(response) {
+            window.location.href = "pagina.html";
+          },
+          error: function(xhr, status, error) {
+            console.error("Error:", error);
+            alert("Ocurrió un error al registrar. Por favor intenta nuevamente.");
+          }
+        });
       });
-
-           $.ajax({
-               type: "post"
-               data: datos,
-               url: "",
-               success: (valor){
-
-               }
-           });
-
-
-          });
-
-
-</script>
+    });
+  </script>
+</body>
+</html>
