@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Parqueadero - Acceso</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPytE9kuPSHOaqiU_vSTHiFgCniBlroXA7IA&s') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            width: 400px;
+            padding: 40px;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .logo img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+            color: #2c3e50;
+        }
+
+        .toggle-form a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .toggle-form a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            height: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .parking-icon {
+            font-size: 24px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Logo y título -->
+        <div class="logo">
+            <h1>ParkingNFS</h1>
+            <p>bienvenido a nustro parqueadero</p>
+        </div>
+        
+        <!-- Formulario de Login -->
+        <form id="login-form">
+            <div class="form-group">
+                <label for="login-email">Correo Electrónico</label>
+                <input type="email" id="login-email" placeholder="corro electronico" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Contraseña</label>
+                <input type="password" id="login-password" placeholder="Ingrese su contraseña" required>
+            </div>
+            <div id="login-error" class="error"></div>
+            <button type="submit"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</button>
+        </form>
+        
+        <!-- Formulario de Registro -->
+        <form id="register-form" class="hidden">
+            <div class="form-group">
+                <label for="register-email">Correo Electrónico</label>
+                <input type="email" id="register-email" placeholder="ejemplo@dominio.com" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">Contraseña (mínimo 8 caracteres)</label>
+                <input type="password" id="register-password" placeholder="Cree una contraseña segura" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirmar Contraseña</label>
+                <input type="password" id="confirm-password" placeholder="Repita su contraseña" required>
+            </div>
+            <div id="register-error" class="error"></div>
+            <button type="submit"><i class="fas fa-user-plus"></i> Registrarse</button>
+        </form>
+        
+        <div class="toggle-form">
+            <span id="toggle-text">¿No tienes una cuenta? </span>
+            <a id="toggle-link">Regístrate aquí</a>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos simulada usando localStorage
+        const users = JSON.parse(localStorage.getItem('parking_users')) || {};
+        
+        // Elementos del DOM
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const toggleLink = document.getElementById('toggle-link');
+        const toggleText = document.getElementById('toggle-text');
+        const loginError = document.getElementById('login-error');
+        const registerError = document.getElementById('register-error');
+        
+        // Alternar entre formularios
+        toggleLink.addEventListener('click', () => {
+            if (loginForm.classList.contains('hidden')) {
+                // Cambiar a login
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                toggleText.textContent = '¿No tienes una cuenta? ';
+                toggleLink.textContent = 'Regístrate aquí';
+            } else {
+                // Cambiar a registro
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+                toggleText.textContent = '¿Ya tienes una cuenta? ';
+                toggleLink.textContent = 'Inicia sesión aquí';
+            }
+            
+            // Limpiar errores
+            loginError.textContent = '';
+            registerError.textContent = '';
+        });
+        
+        // Validar email
+        function isValidEmail(email) {
+            const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return re.test(email);
+        }
+        
+        // Manejar login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!isValidEmail(email)) {
+                loginError.textContent = 'Por favor ingrese un email válido';
+                return;
+            }
+            
+            if (users[email] && users[email] === password) {
+                loginError.textContent = '';
+                alert(`¡Bienvenido a ParkingControl, ${email.split('@')[0]}!`);
+                // Redirección simulada
+                window.location.href = 'dashboard.html';
+            } else {
+                loginError.textContent = 'Email o contraseña incorrectos';
+            }
+        });
+        
+        // Manejar registro
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (!isValidEmail(email)) {
+                registerError.textContent = 'Por favor ingrese un email válido';
+                return;
+            }
+            
+            if (password.length < 8) {
+                registerError.textContent = 'La contraseña debe tener al menos 8 caracteres';
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                registerError.textContent = 'Las contraseñas no coinciden';
+                return;
+            }
+            
+            if (users[email]) {
+                registerError.textContent = 'Este email ya está registrado';
+                return;
+            }
+            
+            // Registrar usuario
+            users[email] = password;
+            localStorage.setItem('parking_users', JSON.stringify(users));
+            
+            alert(`¡Registro exitoso, ${email.split('@')[0]}! Ahora puedes iniciar sesión.`);
+            
+            // Cambiar a formulario de login
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+            toggleText.textContent = '¿No tienes una cuenta? ';
+            toggleLink.textContent = 'Regístrate aquí';
+            
+            // Limpiar formularios
+            loginForm.reset();
+            registerForm.reset();
+            registerError.textContent = '';
+        });
+    </script>
+</body>
+</html>

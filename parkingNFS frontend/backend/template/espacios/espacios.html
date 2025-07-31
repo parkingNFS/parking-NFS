@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>reserva en parkingNFS</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #2b2c7e;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #000000;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        .parking-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .spot {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            font-weight: bold;
+            color: white;
+        }
+        .free {
+            background: linear-gradient(135deg, #70948d, #55efc4);
+        }
+        .occupied {
+            background: linear-gradient(135deg, #582323, #d63031);
+        }
+        .reserved {
+            background: linear-gradient(135deg, #917747, #e17055);
+        }
+        .spot:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .controls {
+            margin: 30px auto;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        button {
+            background: #000000;
+            color: rgb(255, 255, 255);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(108, 92, 231, 0.3);
+        }
+        button:hover {
+            background: #000000;
+            transform: translateY(-2px);
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        .stat {
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Parking NFS</h1>
+    
+    <div class="stats">
+        <div class="stat">Total: <span id="total">12</span></div>
+        <div class="stat">Libres: <span id="free">9</span></div>
+        <div class="stat">Ocupados: <span id="occupied">2</span></div>
+        <div class="stat">Reservados: <span id="reserved">1</span></div>
+    </div>
+    
+    <div class="controls">
+        <button onclick="reserveRandom()">Reservar</button>
+        <button onclick="occupyRandom()">Ocupar</button>
+        <button onclick="freeRandom()">Liberar</button>
+    </div>
+    
+    <div class="parking-container" id="parking"></div>
+    
+    <script>
+        // Datos iniciales
+        const spots = Array(12).fill().map((_, i) => ({
+            id: i+1,
+            status: 'free',
+            plate: '',
+            client: ''
+        }));
+        
+       
+        // Renderizar parking
+        function render() {
+            const parking = document.getElementById('parking');
+            parking.innerHTML = '';
+            
+            let free = 0, occupied = 0, reserved = 0;
+            
+            spots.forEach(spot => {
+                const spotEl = document.createElement('div');
+                spotEl.className = `spot ${spot.status}`;
+                spotEl.innerHTML = `<div>${spot.id}</div>`;
+                spotEl.onclick = () => showInfo(spot);
+                parking.appendChild(spotEl);
+                
+                if (spot.status === 'free') free++;
+                else if (spot.status === 'occupied') occupied++;
+                else if (spot.status === 'reserved') reserved++;
+            });
+            
+            document.getElementById('total').textContent = spots.length;
+            document.getElementById('free').textContent = free;
+            document.getElementById('occupied').textContent = occupied;
+            document.getElementById('reserved').textContent = reserved;
+        }
+        
+        function showInfo(spot) {
+            alert(`Lugar ${spot.id}\nEstado: ${spot.status}\n` +
+                  (spot.plate ? `Placa: ${spot.plate}\n` : '') +
+                  (spot.client ? `Cliente: ${spot.client}\n` : ''));
+        }
+        
+        function reserveRandom() {
+            const freeSpots = spots.filter(s => s.status === 'free');
+            if (freeSpots.length === 0) return alert('No hay lugares libres');
+            
+            const spot = freeSpots[Math.floor(Math.random() * freeSpots.length)];
+            const client = prompt(`Reservar lugar ${spot.id}:\nNombre del cliente:`);
+            if (client) {
+                spot.status = 'reserved';
+                spot.client = client;
+                render();
+            }
+        }
+        
+        function occupyRandom() {
+            const freeSpots = spots.filter(s => s.status === 'free');
+            if (freeSpots.length === 0) return alert('No hay lugares libres');
+            
+            const spot = freeSpots[Math.floor(Math.random() * freeSpots.length)];
+            const plate = prompt(`Ocupar lugar ${spot.id}:\nPlaca del vehículo:`);
+            if (plate) {
+                spot.status = 'occupied';
+                spot.plate = plate;
+                render();
+            }
+        }
+        
+        function freeRandom() {
+            const takenSpots = spots.filter(s => s.status !== 'free');
+            if (takenSpots.length === 0) return alert('No hay lugares ocupados/reservados');
+            
+            const spot = takenSpots[Math.floor(Math.random() * takenSpots.length)];
+            if (confirm(`¿Liberar lugar ${spot.id}?`)) {
+                spot.status = 'free';
+                spot.plate = '';
+                spot.client = '';
+                render();
+            }
+        }
+        
+        render();
+    </script>
+</body>
+</html>
